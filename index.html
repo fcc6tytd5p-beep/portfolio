@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geraldine Ubongen </title>
+  <!-- Load Inter & Roboto via Google Fonts for clean sans-serif typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <!-- Load Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Configure Tailwind theme tokens matching Activity 8.2 Style Guide
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            deepTeal: '#0F4C5C',
+            warmBeige: '#E4D6C0',
+            warmAlabaster: '#F5F4F0',
+            slateGrey: '#647488',
+            darkSlate: '#1E293B',
+            pureWhite: '#FFFFFF',
+          },
+          fontFamily: {
+            sans: ['Roboto', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    /* Smooth scrolling and offset for sticky header */
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 84px;
+    }
+    body {
+      background-color: #F5F4F0;
+      color: #1E293B;
+      font-family: 'Roboto', 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Active navigation indicator using Warm Beige (#E4D6C0) underline */
+    .nav-link {
+      position: relative;
+      padding-bottom: 4px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    .nav-link:hover,
+    .nav-link:focus-visible {
+      color: #E4D6C0;
+      outline: none;
+    }
+    .nav-link.active {
+      color: #E4D6C0;
+      border-bottom-color: #E4D6C0;
+      font-weight: 700;
+    }
+
+    /* Simulated Mobile Viewport Mode (375px) when toggled by user */
+    body.preview-mobile-mode {
+      background-color: #cbd5e1;
+    }
+    body.preview-mobile-mode #portfolio-shell {
+      max-width: 390px;
+      margin: 16px auto;
+      border-radius: 24px;
+      overflow-x: hidden;
+      box-shadow: 0 20px 50px rgba(30, 41, 59, 0.25);
+      border: 6px solid #1E293B;
+      background-color: #F5F4F0;
+    }
+
+    /* Minimum 48px accessible touch targets on interactive controls */
+    .touch-target {
+      min-height: 48px;
+      min-width: 48px;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-warmBeige selection:text-darkSlate">
+  <!-- Main Portfolio Wrapper (supports full-width & optional 375px mobile preview frame) -->
+  <div id="portfolio-shell" class="min-h-screen flex flex-col bg-warmAlabaster pt-[68px] transition-all duration-300">
+    <!-- Persistent Top Navigation Bar -->
+<header id="top-navbar" class="fixed left-0 right-0 top-0 z-40 w-full bg-deepTeal text-pureWhite shadow-md border-b-2 border-warmBeige">
+        <div class="flex items-center justify-between min-h-[68px] gap-2">
+          <!-- Brand Mark -->
+          <a href="#home" data-nav="home" class="nav-trigger flex items-center gap-2.5 text-pureWhite font-bold tracking-wide text-lg sm:text-xl rounded-lg px-2 py-2 touch-target focus:outline-none focus:ring-2 focus:ring-warmBeige">
+            <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-warmBeige text-deepTeal font-bold text-sm shrink-0">GU</span>
+            <span>PORTFOLIO</span>
+          </a>
+
+          <!-- Desktop Navigation Links -->
+          <nav aria-label="Primary Navigation" class="hidden md:flex items-center gap-5 lg:gap-7 text-sm lg:text-base font-medium">
+            <a href="#home" data-nav="home" class="nav-link active">Home</a>
+            <a href="#about" data-nav="about" class="nav-link">About</a>
+            <a href="#skills" data-nav="skills" class="nav-link">Skills</a>
+            <a href="#projects" data-nav="projects" class="nav-link">Projects</a>
+            <a href="#education" data-nav="education" class="nav-link">Education</a>
+            <a href="#contact" data-nav="contact" class="nav-link">Contact</a>
+          </nav>
+
+          <!-- Right Controls: Viewport Preview Toggle + Mobile Hamburger Button -->
+          <div class="flex items-center gap-2">
+            <button
+              id="viewport-toggle-btn"
+              type="button"
+              aria-pressed="false"
+              class="touch-target inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-pureWhite/10 hover:bg-pureWhite/20 text-warmBeige border border-warmBeige/50 text-xs sm:text-sm font-semibold transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-warmBeige"
+              title="Toggle between Desktop view and 375px Mobile Viewport Preview"
+            >
+              <!-- Mobile Icon SVG -->
+              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="6" y="2" width="12" height="20" rx="2" ry="2"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+              </svg>
+              <span id="viewport-toggle-label">Mobile Preview</span>
+            </button>
+
+            <button
+              id="mobile-menu-btn"
+              type="button"
+              aria-expanded="false"
+              aria-controls="mobile-drawer"
+              aria-label="Toggle navigation menu"
+              class="md:hidden touch-target inline-flex items-center justify-center p-2.5 rounded-lg bg-pureWhite/10 hover:bg-pureWhite/20 text-pureWhite border border-pureWhite/20 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-warmBeige"
+            >
+              <!-- Hamburger / Close SVG -->
+              <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+              <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      <!-- Responsive Mobile Navigation Drawer -->
+      <div id="mobile-drawer" class="hidden md:hidden bg-deepTeal border-t border-warmBeige/30 px-4 py-3 space-y-1">
+        <a href="#home" data-nav="home" class="mobile-nav-link touch-target flex items-center px-4 py-2.5 rounded-lg text-base font-medium text-warmBeige bg-pureWhite/10">Home</a>
+        <a href="#about" data-nav="about" class="mobile-nav-link touch-target flex items-center px-4 py-2.5 rounded-lg text-base font-medium text-pureWhite hover:bg-pureWhite/10">About</a>
+        <a href="#skills" data-nav="skills" class="mobile-nav-link touch-target flex items-center px-4 py-2.5 rounded-lg text-base font-medium text-pureWhite hover:bg-pureWhite/10">Skills</a>
+        <a href="#projects" data-nav="projects" class="mobile-nav-link touch-target flex items-center px-4 py-2.5 rounded-lg text-base font-medium text-pureWhite hover:bg-pureWhite/10">Projects</a>
+        <a href="#education" data-nav="education" class="mobile-nav-link touch-target flex items-center px-4 py-2.5 rounded-lg text-base font-medium text-pureWhite hover:bg-pureWhite/10">Education</a>
+        <a href="#contact" data-nav="contact" class="mobile-nav-link touch-target flex items-center px-4 py-2.5 rounded-lg text-base font-medium text-pureWhite hover:bg-pureWhite/10">Contact</a>
+      </div>
+    </header>
+    <!-- Main Content -->
+    <main class="flex-1">
+      <!-- 1. HOME / HERO SECTION -->
+      <section id="home" data-section="home" class="pt-4 pb-10 sm:pt-6 sm:pb-14 lg:pt-8 lg:pb-16">
+        <div class="max-w-6xl mx-auto space-y-8">
+        <!-- Hero Banner Card -->
+          <div class="rounded-2xl bg-warmBeige border-l-8 border-deepTeal p-6 sm:p-10 shadow-sm">
+            <div class="flex flex-col lg:flex-row items-start lg:justify-between gap-8">
+              <!-- Left: text & buttons -->
+              <div class="space-y-4 max-w-2xl">
+                <p class="inline-block text-xs sm:text-sm font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-deepTeal text-pureWhite">
+                </p>
+                <h1 class="text-2xl sm:text-4xl font-bold text-deepTeal leading-tight">
+                  Hi, I'm Geraldine Ubongen
+                </h1>
+                <p class="text-base sm:text-lg text-darkSlate leading-relaxed max-w-2xl">
+                  BSIT student at CITCS specializing in the Network Security track, focused on building clean, accessible, and security-aware web interfaces.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-3 pt-1">
+                  <a
+                    href="#projects"
+                    class="touch-target inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-deepTeal text-pureWhite font-bold text-sm sm:text-base shadow-sm hover:bg-darkSlate transition focus:outline-none focus:ring-2 focus:ring-deepTeal focus:ring-offset-2 focus:ring-offset-warmBeige"
+                  >
+                    <span>View Projects</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </a>
+
+                  <button
+                    id="hero-resume-btn"
+                    type="button"
+                    class="touch-target inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-pureWhite text-deepTeal border-2 border-deepTeal font-bold text-sm sm:text-base hover:bg-deepTeal hover:text-pureWhite transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-deepTeal focus:ring-offset-2 focus:ring-offset-warmBeige"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Download Resume</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Right 4 cols: Portrait Photo (Top-right aligned) -->
+              <div
+                class="shrink-0 flex justify-center lg:justify-end"
+                style="align-self: flex-start !important; transform: translateY(-24px) !important;"
+              >
+                <img
+                  src="me.jpg"
+                  alt="Portrait of Geraldine Ubongen"
+                  class="w-48 h-52 sm:w-56 sm:h-56 rounded-2xl object-cover object-top border-4 border-deepTeal shadow-md"
+                  style="object-position: center 25%;"
+                />
+              </div>
+            </div>
+          </div>
+          <!-- Featured Project Spotlight Card -->
+          <div class="rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 sm:p-7 shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div class="space-y-2.5 max-w-3xl">
+                <span class="text-xs font-bold uppercase tracking-wider text-deepTeal">Featured Highlight</span>
+                <h2 class="text-xl sm:text-2xl font-bold text-darkSlate">
+                  Featured Project: Personal Portfolio Website
+                </h2>
+                <p class="text-sm sm:text-base text-darkSlate/90 leading-relaxed">
+                  Responsive multi-page portfolio designed from approved Activity 8.1 wireframes into a consistent high-fidelity visual system with clear navigation, accessible contrast, and structured project showcases.
+                </p>
+                <div class="flex flex-wrap gap-2 pt-1">
+                  <span class="px-3 py-1 rounded-full text-xs sm:text-sm font-bold bg-warmBeige text-darkSlate">HTML5</span>
+                  <span class="px-3 py-1 rounded-full text-xs sm:text-sm font-bold bg-warmBeige text-darkSlate">CSS3</span>
+                  <span class="px-3 py-1 rounded-full text-xs sm:text-sm font-bold bg-warmBeige text-darkSlate">UI/UX</span>
+                </div>
+              </div>
+              <div class="shrink-0">
+                <button
+                  type="button"
+                  data-open-project="portfolio-website"
+                  class="touch-target w-full md:w-auto px-5 py-3 rounded-xl bg-deepTeal text-pureWhite font-semibold text-sm hover:bg-darkSlate transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-deepTeal"
+                >
+                  Inspect Project Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. ABOUT SECTION -->
+      <section id="about" data-section="about" class="min-h-screen flex items-center py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-pureWhite/60 border-y border-slateGrey/20">
+        <div class="w-full max-w-6xl  mx-auto space-y-6">
+          <div class="flex items-center justify-between border-b-2 border-deepTeal pb-2.5">
+            <h2 class="text-2xl sm:text-3xl font-bold text-deepTeal">About Me</h2>
+            <span class="text-xs sm:text-sm font-semibold text-slateGrey">Background &amp; Goals</span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Background Card -->
+            <article class="rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 shadow-sm space-y-3">
+              <h3 class="text-lg sm:text-xl font-bold text-deepTeal">About Me — Background &amp; Creative Focus</h3>
+              <p class="text-sm sm:text-base text-darkSlate leading-relaxed">
+                As an Information technology student on the Network Security track, I am dedidcated to mastering the fundamentals of coding, logical thinking, and clean design. My works centers on core programming concepts and human-computer interaction, giving me hands-on practice in turning simple concepts into structured, working outputs. I enjoy bridging the gap between rough wireframes and functional web interfaces, making sure every page I build is readable, well-organized, and thoughtfully put together.
+              </p>
+            </article>
+
+            <!-- Interests & Goals Card -->
+            <article class="rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 shadow-sm space-y-4">
+              <h3 class="text-lg sm:text-xl font-bold text-deepTeal">Interests &amp; Learning Goals</h3>
+              <p class="text-sm sm:text-base text-darkSlate leading-relaxed">
+                My goal is to build a strong foundation in network security structure, reusable UI components, and inclusive design practices so every visitor can browse comfortably across desktop and mobile screens.
+              </p>
+              <div class="flex flex-wrap gap-2.5 pt-1">
+                <span class="px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-warmBeige text-darkSlate border border-slateGrey/20">
+                  UI/UX Prototyping
+                </span>
+                <span class="px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-warmBeige text-darkSlate border border-slateGrey/20">
+                  Responsive Web
+                </span>
+                <span class="px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-warmBeige text-darkSlate border border-slateGrey/20">
+                  Web Accessibility
+                </span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. SKILLS SECTION -->
+      <section id="skills" data-section="skills" class="min-h-screen flex items-center py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto space-y-6">
+          <div class="flex items-center justify-between border-b-2 border-deepTeal pb-2.5">
+            <h2 class="text-2xl sm:text-3xl font-bold text-deepTeal">Skills &amp; Strengths</h2>
+            <span class="text-xs sm:text-sm font-semibold text-slateGrey">Technical, Tools &amp; Core Strengths</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Technical Skills Card -->
+            <article class="rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 shadow-sm flex flex-col justify-between space-y-4">
+              <div class="space-y-3">
+                <div class="w-11 h-11 rounded-xl bg-deepTeal text-pureWhite flex items-center justify-center font-bold text-sm">
+                  01
+                </div>
+                <h3 class="text-xl font-bold text-deepTeal">Technical Skills</h3>
+                <ul class="space-y-2.5 text-sm sm:text-base text-darkSlate">
+                  <li class="flex items-start gap-2.5">
+                    <span class="mt-1.5 w-2.5 h-2.5 rounded-full bg-deepTeal shrink-0"></span>
+                    <div>
+                      <span class="font-bold">Python Basics:</span> Variables, conditional branching, and automated logic loops for console programs.
+                    </div>
+                  </li>
+                  <li class="flex items-start gap-2.5">
+                    <span class="mt-1.5 w-2.5 h-2.5 rounded-full bg-deepTeal shrink-0"></span>
+                    <div>
+                      <span class="font-bold">HTML5 &amp; CSS3:</span> Semantic page structure, card layouts, and responsive styling principles.
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="flex flex-wrap gap-2 pt-2">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">Python Basics</span>
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">HTML5 &amp; CSS3</span>
+              </div>
+            </article>
+
+            <!-- Tools & Design Card -->
+            <article class="rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 shadow-sm flex flex-col justify-between space-y-4">
+              <div class="space-y-3">
+                <div class="w-11 h-11 rounded-xl bg-deepTeal text-pureWhite flex items-center justify-center font-bold text-sm">
+                  02
+                </div>
+                <h3 class="text-xl font-bold text-deepTeal">Tools &amp; Design</h3>
+                <ul class="space-y-2.5 text-sm sm:text-base text-darkSlate">
+                  <li class="flex items-start gap-2.5">
+                    <span class="mt-1.5 w-2.5 h-2.5 rounded-full bg-deepTeal shrink-0"></span>
+                    <div>
+                      <span class="font-bold">Canva Layouts:</span> High-fidelity desktop and mobile mockups, style guides, and component sheets.
+                    </div>
+                  </li>
+                  <li class="flex items-start gap-2.5">
+                    <span class="mt-1.5 w-2.5 h-2.5 rounded-full bg-deepTeal shrink-0"></span>
+                    <div>
+                      <span class="font-bold">UI Wireframing:</span> Page hierarchy, navigation structure, and user-centered screen planning.
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="flex flex-wrap gap-2 pt-2">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">Canva Layouts</span>
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">UI Wireframing</span>
+              </div>
+            </article>
+
+            <!-- Core Strengths Card -->
+            <article class="rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 shadow-sm flex flex-col justify-between space-y-4">
+              <div class="space-y-3">
+                <div class="w-11 h-11 rounded-xl bg-deepTeal text-pureWhite flex items-center justify-center font-bold text-sm">
+                  03
+                </div>
+                <h3 class="text-xl font-bold text-deepTeal">Core Strengths</h3>
+                <p class="text-sm sm:text-base text-darkSlate leading-relaxed">
+                  Personal work habits that support steady academic progress, clean documentation, and reliable teamwork:
+                </p>
+                <div class="flex flex-wrap gap-2 pt-1">
+                  <span class="px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-warmBeige text-darkSlate border border-slateGrey/20">
+                    Problem-Solving
+                  </span>
+                  <span class="px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-warmBeige text-darkSlate border border-slateGrey/20">
+                    Visual Organization
+                  </span>
+                  <span class="px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-warmBeige text-darkSlate border border-slateGrey/20">
+                    Clear Communication
+                  </span>
+                  <span class="px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-warmBeige text-darkSlate border border-slateGrey/20">
+                    Attention to Detail
+                  </span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. PROJECTS SECTION -->
+      <section id="projects" data-section="projects" class="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-pureWhite/60 border-y border-slateGrey/20">
+        <div class="max-w-6xl mx-auto space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-deepTeal pb-2.5">
+            <h2 class="text-2xl sm:text-3xl font-bold text-deepTeal">Projects &amp; Outputs</h2>
+            <span class="text-xs sm:text-sm font-semibold text-slateGrey">Click any card to inspect details</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Project 1: Personal Portfolio Website -->
+            <article class="rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 shadow-sm flex flex-col justify-between space-y-4 hover:border-deepTeal transition">
+              <div class="space-y-3">
+                <div class="h-32 rounded-xl bg-deepTeal text-pureWhite p-4 flex flex-col justify-between">
+                  <span class="text-xs font-bold uppercase tracking-wider text-warmBeige">Web &amp; UI/UX Prototype</span>
+                  <span class="text-lg font-bold">Personal Portfolio Website</span>
+                </div>
+                <p class="text-sm sm:text-base text-darkSlate leading-relaxed">
+                  A responsive multi-page portfolio translated from Activity 8.1 wireframes into a high-fidelity visual system with Deep Teal and Warm Beige tokens.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">HTML5</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">CSS3</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">UI/UX</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                data-open-project="portfolio-website"
+                class="touch-target w-full px-4 py-2.5 rounded-xl bg-deepTeal text-pureWhite font-semibold text-sm hover:bg-darkSlate transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-deepTeal"
+              >
+                View Details &amp; Preview
+              </button>
+            </article>
+
+            <!-- Project 2: Pet Palace -->
+            <article class="rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 shadow-sm flex flex-col justify-between space-y-4 hover:border-deepTeal transition">
+              <div class="space-y-3">
+                <div class="h-32 rounded-xl bg-deepTeal text-pureWhite p-4 flex flex-col justify-between">
+                  <span class="text-xs font-bold uppercase tracking-wider text-warmBeige">E-Commerce Interface</span>
+                  <span class="text-lg font-bold">Pet Palace</span>
+                </div>
+                <p class="text-sm sm:text-base text-darkSlate leading-relaxed">
+                  An e-commerce home screen prototype and interactive user interface layout designed for a simulated pet supply platform.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">UI/UX</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">Canva</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">Prototyping</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                data-open-project="pet-palace"
+                class="touch-target w-full px-4 py-2.5 rounded-xl bg-deepTeal text-pureWhite font-semibold text-sm hover:bg-darkSlate transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-deepTeal"
+              >
+                View Details &amp; Preview
+              </button>
+            </article>
+
+            <!-- Project 3: Terminal Savings Ledger -->
+            <article class="rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 shadow-sm flex flex-col justify-between space-y-4 hover:border-deepTeal transition">
+              <div class="space-y-3">
+                <div class="h-32 rounded-xl bg-deepTeal text-pureWhite p-4 flex flex-col justify-between">
+                  <span class="text-xs font-bold uppercase tracking-wider text-warmBeige">Python Console Program</span>
+                  <span class="text-lg font-bold">Terminal Savings Ledger</span>
+                </div>
+                <p class="text-sm sm:text-base text-darkSlate leading-relaxed">
+                  A Python program featuring automated tracking loops for financial savings simulation and iterative balance updates.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">Python</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">Loops</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">Logic</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                data-open-project="savings-ledger"
+                class="touch-target w-full px-4 py-2.5 rounded-xl bg-deepTeal text-pureWhite font-semibold text-sm hover:bg-darkSlate transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-deepTeal"
+              >
+                View Details &amp; Preview
+              </button>
+            </article>
+
+            <!-- Project 4: Automated Banking Simulation -->
+            <article class="rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 shadow-sm flex flex-col justify-between space-y-4 hover:border-deepTeal transition">
+              <div class="space-y-3">
+                <div class="h-32 rounded-xl bg-deepTeal text-pureWhite p-4 flex flex-col justify-between">
+                  <span class="text-xs font-bold uppercase tracking-wider text-warmBeige">Conditional Simulation</span>
+                  <span class="text-lg font-bold">Automated Banking Simulation</span>
+                </div>
+                <p class="text-sm sm:text-base text-darkSlate leading-relaxed">
+                  A multi-way branch conditional program executing automated transaction options based on user menu choices.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">Python</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">Conditionals</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">Simulation</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                data-open-project="banking-simulation"
+                class="touch-target w-full px-4 py-2.5 rounded-xl bg-deepTeal text-pureWhite font-semibold text-sm hover:bg-darkSlate transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-deepTeal"
+              >
+                View Details &amp; Preview
+              </button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. EDUCATION SECTION -->
+      <section id="education" data-section="education" class="min-h-screen flex items-center py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto space-y-6">
+          <div class="flex items-center justify-between border-b-2 border-deepTeal pb-2.5">
+            <h2 class="text-2xl sm:text-3xl font-bold text-deepTeal">Education &amp; Milestones</h2>
+            <span class="text-xs sm:text-sm font-semibold text-slateGrey">Academic Background</span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Degree & Resume Card -->
+            <article class="lg:col-span-7 rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 shadow-sm space-y-4">
+              <div class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">
+                BSIT • 1st Year
+              </div>
+              <h3 class="text-xl sm:text-2xl font-bold text-deepTeal">
+                Bachelor of Science in Information Technology (1st Year)
+              </h3>
+              <p class="text-sm sm:text-base text-darkSlate font-medium">
+                Section: <span class="font-bold text-deepTeal">CITCS 1N-B</span> • College of Information Technology and Computer Science (CITCS)
+              </p>
+              <p class="text-sm sm:text-base text-darkSlate/90 leading-relaxed">
+                Core Coursework: <strong>Computing Fundamentals</strong>, <strong>Web Design &amp; Prototyping</strong>, structured problem decomposition, and responsive interface design.
+              </p>
+              <div class="pt-2">
+                <button
+                  id="education-resume-btn"
+                  type="button"
+                  class="touch-target inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-deepTeal text-pureWhite font-bold text-sm hover:bg-darkSlate transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-deepTeal"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span>Download Resume (PDF)</span>
+                </button>
+              </div>
+            </article>
+
+            <!-- Certificates & Academic Milestones Card -->
+            <article class="lg:col-span-5 rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 shadow-sm space-y-4">
+              <h3 class="text-xl font-bold text-deepTeal">Certificates &amp; Academic Milestones</h3>
+              <ul class="space-y-3 text-sm sm:text-base text-darkSlate">
+                <li class="p-3.5 rounded-xl bg-warmAlabaster border border-slateGrey/25">
+                  <p class="font-bold text-deepTeal">UI/UX Wireframing &amp; Visual Design Foundations</p>
+                  <p class="text-xs sm:text-sm text-slateGrey mt-0.5">Translated Activity 8.1 wireframes into structured high-fidelity desktop and mobile mockups.</p>
+                </li>
+                <li class="p-3.5 rounded-xl bg-warmAlabaster border border-slateGrey/25">
+                  <p class="font-bold text-deepTeal">Web Accessibility &amp; Responsive Standards</p>
+                  <p class="text-xs sm:text-sm text-slateGrey mt-0.5">Applied readable contrast pairings, clear input labels, and mobile-friendly touch sizing.</p>
+                </li>
+                <li class="p-3.5 rounded-xl bg-warmAlabaster border border-slateGrey/25">
+                  <p class="font-bold text-deepTeal">Python &amp; Computational Logic Activities</p>
+                  <p class="text-xs sm:text-sm text-slateGrey mt-0.5">Built loop-driven savings tracking and multi-branch conditional banking simulations.</p>
+                </li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. CONTACT SECTION -->
+      <section id="contact" data-section="contact" class="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-pureWhite/60 border-t border-slateGrey/20">
+        <div class="max-w-6xl mx-auto space-y-6">
+          <div class="flex items-center justify-between border-b-2 border-deepTeal pb-2.5">
+            <h2 class="text-2xl sm:text-3xl font-bold text-deepTeal">Contact</h2>
+            <span class="text-xs sm:text-sm font-semibold text-slateGrey">Get In Touch</span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Direct Contact Info Column -->
+            <div class="lg:col-span-5 rounded-2xl bg-deepTeal text-pureWhite p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
+              <div class="space-y-3">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate">
+                  Direct Channels
+                </span>
+                <h3 class="text-2xl font-bold">Let&apos;s Connect</h3>
+                <p class="text-sm sm:text-base text-pureWhite/90 leading-relaxed">
+                  Have feedback on my Activity 8.2 prototype, CITCS 1N-B coursework, or project outputs? Send a direct message using the form.
+                </p>
+              </div>
+
+              <div class="space-y-3 text-sm sm:text-base">
+                <div class="p-3.5 rounded-xl bg-pureWhite/10 border border-warmBeige/30">
+                  <p class="text-xs uppercase tracking-wider text-warmBeige font-bold">Email Address</p>
+                  <p class="font-semibold break-all mt-0.5">geraldineubongen7@gmail.com</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-pureWhite/10 border border-warmBeige/30">
+                  <p class="text-xs uppercase tracking-wider text-warmBeige font-bold">Academic Section</p>
+                  <p class="font-semibold mt-0.5">Geraldine Ubongen • CITCS 1N-B</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accessible Contact Form Column -->
+            <div class="lg:col-span-7 rounded-2xl bg-pureWhite border border-slateGrey/40 p-6 sm:p-8 shadow-sm">
+              <h3 class="text-xl font-bold text-deepTeal mb-4">Send a Message</h3>
+              <form id="contact-form" class="space-y-4" novalidate>
+                <div>
+                  <label for="full-name" class="block text-sm font-bold text-darkSlate mb-1.5">
+                    Full Name
+                  </label>
+                  <input
+                    id="full-name"
+                    name="fullName"
+                    type="text"
+                    required
+                    placeholder="Enter your full name"
+                    class="touch-target w-full px-4 py-3 rounded-xl bg-pureWhite border-[1.5px] border-slateGrey text-darkSlate placeholder-slateGrey/70 focus:outline-none focus:border-deepTeal focus:ring-2 focus:ring-deepTeal/20"
+                  />
+                </div>
+
+                <div>
+                  <label for="email-address" class="block text-sm font-bold text-darkSlate mb-1.5">
+                    Email Address
+                  </label>
+                  <input
+                    id="email-address"
+                    name="emailAddress"
+                    type="email"
+                    required
+                    value="geraldineubongen7@gmail.com"
+                    class="touch-target w-full px-4 py-3 rounded-xl bg-pureWhite border-[1.5px] border-slateGrey text-darkSlate placeholder-slateGrey/70 focus:outline-none focus:border-deepTeal focus:ring-2 focus:ring-deepTeal/20"
+                  />
+                </div>
+
+                <div>
+                  <label for="message-box" class="block text-sm font-bold text-darkSlate mb-1.5">
+                    Message
+                  </label>
+                  <textarea
+                    id="message-box"
+                    name="message"
+                    rows="4"
+                    required
+                    placeholder="Write your project inquiry or message here..."
+                    class="w-full px-4 py-3 rounded-xl bg-pureWhite border-[1.5px] border-slateGrey text-darkSlate placeholder-slateGrey/70 focus:outline-none focus:border-deepTeal focus:ring-2 focus:ring-deepTeal/20"
+                  ></textarea>
+                </div>
+
+                <!-- Inline Status / Feedback Banner (no browser alert()) -->
+                <div id="form-feedback" role="status" aria-live="polite" class="hidden rounded-xl p-3.5 text-sm font-medium"></div>
+
+                <button
+                  type="submit"
+                  class="touch-target w-full sm:w-auto px-7 py-3 rounded-xl bg-deepTeal text-pureWhite font-bold text-sm sm:text-base hover:bg-darkSlate transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-deepTeal focus:ring-offset-2"
+                >
+                  Send Message
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Persistent Footer -->
+    <footer class="bg-deepTeal text-pureWhite border-t-4 border-warmBeige py-5 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
+        <p class="font-semibold text-pureWhite text-center sm:text-left">
+          Geraldine Ubongen | CITCS 1N-B
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-2 text-warmBeige font-semibold">
+          <button type="button" data-social="GitHub" class="social-link px-2.5 py-1.5 rounded-lg hover:bg-pureWhite/10 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-warmBeige">
+            GitHub
+          </button>
+          <span aria-hidden="true">&bull;</span>
+          <button type="button" data-social="LinkedIn" class="social-link px-2.5 py-1.5 rounded-lg hover:bg-pureWhite/10 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-warmBeige">
+            LinkedIn
+          </button>
+          <span aria-hidden="true">&bull;</span>
+          <a href="mailto:geraldineubongen7@gmail.com" class="px-2.5 py-1.5 rounded-lg hover:bg-pureWhite/10 transition focus:outline-none focus:ring-2 focus:ring-warmBeige">
+            Email
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Interactive Project Detail Modal -->
+  <div
+    id="project-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-project-title"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-darkSlate/70 p-4"
+  >
+    <div class="w-full max-w-xl rounded-2xl bg-pureWhite border-2 border-deepTeal shadow-2xl overflow-hidden">
+      <div class="bg-deepTeal text-pureWhite px-6 py-4 flex items-center justify-between">
+        <div>
+          <p id="modal-project-category" class="text-xs font-bold uppercase tracking-wider text-warmBeige"></p>
+          <h3 id="modal-project-title" class="text-xl font-bold mt-0.5"></h3>
+        </div>
+        <button
+          id="close-modal-btn"
+          type="button"
+          aria-label="Close project details"
+          class="touch-target inline-flex items-center justify-center rounded-lg bg-pureWhite/10 hover:bg-pureWhite/20 text-pureWhite px-3 py-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-warmBeige"
+        >
+          &times;
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <p id="modal-project-summary" class="text-sm sm:text-base text-darkSlate leading-relaxed"></p>
+        <div class="rounded-xl bg-warmAlabaster border border-slateGrey/30 p-4 space-y-1.5">
+          <p class="text-xs font-bold uppercase tracking-wider text-deepTeal">Key Implementation Highlights</p>
+          <p id="modal-project-highlights" class="text-sm text-darkSlate leading-relaxed"></p>
+        </div>
+        <div id="modal-project-tags" class="flex flex-wrap gap-2"></div>
+        <div class="pt-2 flex justify-end">
+          <button
+            id="modal-done-btn"
+            type="button"
+            class="touch-target px-5 py-2.5 rounded-xl bg-deepTeal text-pureWhite font-semibold text-sm hover:bg-darkSlate transition cursor-pointer"
+          >
+            Close Preview
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Banner for Actions (Resume / Social Links) -->
+  <div
+    id="toast-banner"
+    role="status"
+    aria-live="polite"
+    class="fixed bottom-5 right-5 z-50 hidden max-w-sm rounded-xl bg-darkSlate text-pureWhite border-l-4 border-warmBeige px-4 py-3 shadow-xl text-sm font-medium"
+  ></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // Project metadata dictionary for interactive modal inspection
+      const PROJECTS_DATA = {
+        'portfolio-website': {
+          category: 'Web & UI/UX Prototype',
+          title: 'Personal Portfolio Website',
+          summary:
+            'Responsive multi-page portfolio designed from approved Activity 8.1 wireframes into a high-fidelity visual system.',
+          highlights:
+            'Features a persistent navigation bar with active-page highlighting, standardized content cards, accessible form labels, and responsive desktop/mobile layouts.',
+          tags: ['HTML5', 'CSS3', 'UI/UX', 'Responsive Design'],
+        },
+        'pet-palace': {
+          category: 'E-Commerce Interface',
+          title: 'Pet Palace',
+          summary:
+            'An e-commerce home screen prototype and interactive user interface layout for a simulated pet supply platform.',
+          highlights:
+            'Organizes product categories, promotional callouts, and clear visual hierarchy tailored to pet owners browsing online.',
+          tags: ['UI/UX', 'Canva', 'E-Commerce Layout'],
+        },
+        'savings-ledger': {
+          category: 'Python Console Program',
+          title: 'Terminal Savings Ledger',
+          summary:
+            'A Python program featuring automated tracking loops for financial savings simulation.',
+          highlights:
+            'Uses iterative loop structures to record savings entries, recalculate running totals accurately, and display clear terminal summaries.',
+          tags: ['Python', 'Loops', 'Financial Simulation'],
+        },
+        'banking-simulation': {
+          category: 'Conditional Simulation',
+          title: 'Automated Banking Simulation',
+          summary:
+            'A multi-way branch conditional program executing automated transaction options.',
+          highlights:
+            'Evaluates user selections through structured conditional branches to route balance checks, deposits, and withdrawals cleanly.',
+          tags: ['Python', 'Conditionals', 'Transaction Flow'],
+        },
+      };
+
+      const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+      const mobileNavLinks = Array.from(document.querySelectorAll('.mobile-nav-link'));
+      const navTriggers = Array.from(document.querySelectorAll('.nav-trigger, .nav-link, .mobile-nav-link'));
+      const sections = Array.from(document.querySelectorAll('main section[data-section]'));
+
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileDrawer = document.getElementById('mobile-drawer');
+      const hamburgerIcon = document.getElementById('hamburger-icon');
+      const closeIcon = document.getElementById('close-icon');
+
+      const viewportToggleBtn = document.getElementById('viewport-toggle-btn');
+      const viewportToggleLabel = document.getElementById('viewport-toggle-label');
+
+      const projectModal = document.getElementById('project-modal');
+      const closeModalBtn = document.getElementById('close-modal-btn');
+      const modalDoneBtn = document.getElementById('modal-done-btn');
+      const modalCategory = document.getElementById('modal-project-category');
+      const modalTitle = document.getElementById('modal-project-title');
+      const modalSummary = document.getElementById('modal-project-summary');
+      const modalHighlights = document.getElementById('modal-project-highlights');
+      const modalTags = document.getElementById('modal-project-tags');
+
+      const contactForm = document.getElementById('contact-form');
+      const formFeedback = document.getElementById('form-feedback');
+      const toastBanner = document.getElementById('toast-banner');
+
+      let toastTimer = null;
+
+      /**
+       * Displays a non-blocking toast message instead of alert().
+       */
+      function showToast(message) {
+        if (!toastBanner) return;
+        toastBanner.textContent = message;
+        toastBanner.classList.remove('hidden');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toastBanner.classList.add('hidden');
+        }, 3200);
+      }
+
+      /**
+       * Updates the active navigation link across desktop and mobile menus.
+       */
+      function setActiveSection(sectionId) {
+        navLinks.forEach((link) => {
+          const isMatch = link.getAttribute('data-nav') === sectionId;
+          link.classList.toggle('active', isMatch);
+          if (isMatch) {
+            link.setAttribute('aria-current', 'page');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+
+        mobileNavLinks.forEach((link) => {
+          const isMatch = link.getAttribute('data-nav') === sectionId;
+          link.classList.toggle('text-warmBeige', isMatch);
+          link.classList.toggle('bg-pureWhite/10', isMatch);
+          link.classList.toggle('font-bold', isMatch);
+          link.classList.toggle('text-pureWhite', !isMatch);
+        });
+      }
+
+      /**
+       * Closes the mobile navigation drawer.
+       */
+      function closeMobileDrawer() {
+        if (!mobileDrawer || !mobileMenuBtn) return;
+        mobileDrawer.classList.add('hidden');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        hamburgerIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+      }
+
+      // Smooth navigation click handler for all section links
+      navTriggers.forEach((trigger) => {
+        trigger.addEventListener('click', (event) => {
+          const targetId = trigger.getAttribute('data-nav');
+          if (!targetId) return;
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            event.preventDefault();
+            setActiveSection(targetId);
+            closeMobileDrawer();
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      // Highlight active section while scrolling
+      function handleScrollSpy() {
+        const scrollPosition = window.scrollY + 140;
+        let currentId = 'home';
+        sections.forEach((sec) => {
+          const top = sec.offsetTop;
+          const height = sec.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            currentId = sec.getAttribute('data-section') || 'home';
+          }
+        });
+        setActiveSection(currentId);
+      }
+
+      window.addEventListener('scroll', handleScrollSpy, { passive: true });
+
+      // Mobile menu button toggle
+      if (mobileMenuBtn && mobileDrawer) {
+        mobileMenuBtn.addEventListener('click', () => {
+          const isOpen = !mobileDrawer.classList.contains('hidden');
+          if (isOpen) {
+            closeMobileDrawer();
+          } else {
+            mobileDrawer.classList.remove('hidden');
+            mobileMenuBtn.setAttribute('aria-expanded', 'true');
+            hamburgerIcon.classList.add('hidden');
+            closeIcon.classList.remove('hidden');
+          }
+        });
+      }
+
+      // Interactive 375px Mobile Viewport Preview toggle
+      if (viewportToggleBtn && viewportToggleLabel) {
+        viewportToggleBtn.addEventListener('click', () => {
+          const enabled = document.body.classList.toggle('preview-mobile-mode');
+          viewportToggleBtn.setAttribute('aria-pressed', String(enabled));
+          viewportToggleLabel.textContent = enabled ? 'Desktop View' : 'Mobile Preview';
+          showToast(
+            enabled
+              ? 'Switched to 375px Mobile Viewport Preview.'
+              : 'Switched back to Full Responsive Desktop View.'
+          );
+        });
+      }
+
+      // Generates and triggers a lightweight resume summary download for Geraldine Ubongen
+      function triggerResumeDownload() {
+        try {
+          const resumeContent = [
+            'GERALDINE UBONGEN',
+            'BSIT — 1st Year | CITCS 1N-B',
+            'Email: geraldineubongen7@gmail.com',
+            '------------------------------------------------------------',
+            'SUMMARY',
+            'First-year BSIT student at CITCS dedicated to turning structured wireframes',
+            'into clean, responsive web interfaces and accessible digital experiences.',
+            '',
+            'SKILLS & STRENGTHS',
+            '- Technical: Python Basics, HTML5 & CSS3',
+            '- Tools & Design: Canva Layouts, UI Wireframing',
+            '- Core Strengths: Problem-Solving, Visual Organization, Clear Communication, Attention to Detail',
+            '',
+            'PROJECTS',
+            '- Personal Portfolio Website (HTML5, CSS3, UI/UX)',
+            '- Pet Palace (UI/UX, Canva)',
+            '- Terminal Savings Ledger (Python, Loops)',
+            '- Automated Banking Simulation (Python, Conditionals)',
+          ].join('\n');
+
+          const blob = new Blob([resumeContent], { type: 'text/plain;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const anchor = document.createElement('a');
+          anchor.href = url;
+          anchor.download = 'Geraldine_Ubongen_Resume_CITCS_1N-B.txt';
+          document.body.appendChild(anchor);
+          anchor.click();
+          document.body.removeChild(anchor);
+          URL.revokeObjectURL(url);
+          showToast('Resume summary downloaded (Geraldine_Ubongen_Resume_CITCS_1N-B.txt).');
+        } catch (err) {
+          showToast('Unable to initiate download in this browser context.');
+        }
+      }
+
+      const heroResumeBtn = document.getElementById('hero-resume-btn');
+      const educationResumeBtn = document.getElementById('education-resume-btn');
+      if (heroResumeBtn) heroResumeBtn.addEventListener('click', triggerResumeDownload);
+      if (educationResumeBtn) educationResumeBtn.addEventListener('click', triggerResumeDownload);
+
+      // Project Modal logic
+      function openProjectModal(projectKey) {
+        const item = PROJECTS_DATA[projectKey];
+        if (!item || !projectModal) return;
+
+        modalCategory.textContent = item.category;
+        modalTitle.textContent = item.title;
+        modalSummary.textContent = item.summary;
+        modalHighlights.textContent = item.highlights;
+
+        modalTags.innerHTML = '';
+        item.tags.forEach((tagText) => {
+          const span = document.createElement('span');
+          span.className = 'px-3 py-1 rounded-full text-xs font-bold bg-warmBeige text-darkSlate';
+          span.textContent = tagText;
+          modalTags.appendChild(span);
+        });
+
+        projectModal.classList.remove('hidden');
+        projectModal.classList.add('flex');
+        closeModalBtn.focus();
+      }
+
+      function closeProjectModal() {
+        if (!projectModal) return;
+        projectModal.classList.add('hidden');
+        projectModal.classList.remove('flex');
+      }
+
+      document.querySelectorAll('[data-open-project]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const key = btn.getAttribute('data-open-project');
+          openProjectModal(key);
+        });
+      });
+
+      if (closeModalBtn) closeModalBtn.addEventListener('click', closeProjectModal);
+      if (modalDoneBtn) modalDoneBtn.addEventListener('click', closeProjectModal);
+
+      if (projectModal) {
+        projectModal.addEventListener('click', (event) => {
+          if (event.target === projectModal) {
+            closeProjectModal();
+          }
+        });
+      }
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeProjectModal();
+          closeMobileDrawer();
+        }
+      });
+
+      // Social footer buttons feedback
+      document.querySelectorAll('.social-link').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const platform = btn.getAttribute('data-social') || 'Profile';
+          showToast(`${platform} link ready for Geraldine Ubongen (CITCS 1N-B).`);
+        });
+      });
+
+      // Contact form validation and accessible confirmation
+      if (contactForm && formFeedback) {
+        contactForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const nameInput = document.getElementById('full-name');
+          const emailInput = document.getElementById('email-address');
+          const messageInput = document.getElementById('message-box');
+
+          const nameVal = nameInput ? nameInput.value.trim() : '';
+          const emailVal = emailInput ? emailInput.value.trim() : '';
+          const msgVal = messageInput ? messageInput.value.trim() : '';
+
+          formFeedback.classList.remove('hidden', 'bg-red-100', 'text-red-900', 'border', 'border-red-300', 'bg-emerald-100', 'text-emerald-900', 'border-emerald-300');
+
+          if (!nameVal || !emailVal || !msgVal) {
+            formFeedback.textContent = 'Please complete Full Name, Email Address, and Message before sending.';
+            formFeedback.classList.add('bg-red-100', 'text-red-900', 'border', 'border-red-300');
+            return;
+          }
+
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailPattern.test(emailVal)) {
+            formFeedback.textContent = 'Please enter a valid email address (for example, geraldineubongen7@gmail.com).';
+            formFeedback.classList.add('bg-red-100', 'text-red-900', 'border', 'border-red-300');
+            return;
+          }
+
+          formFeedback.textContent = `Thank you, ${nameVal}! Your message has been prepared for geraldineubongen7@gmail.com.`;
+          formFeedback.classList.add('bg-emerald-100', 'text-emerald-900', 'border', 'border-emerald-300');
+          if (messageInput) messageInput.value = '';
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
